@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>com.ty</groupId>
-    <artifactId>activity</artifactId>
+    <artifactId>activity-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>activity</name>
     <packaging>jar</packaging>
