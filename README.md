@@ -16,7 +16,7 @@
     ManagementService：提供对流程引擎进行管理和维护的服务。
     
     HistoryService：对流程的历史数据进行操作，包括查询、删除这些历史数据。
-####三 28张表
+### 三 28张表
 ![avatar](/2.png)
 
     1、act_ge_ 通用数据表，ge是general的缩写
@@ -30,7 +30,7 @@
     5、act_ru_ 运行时数据表，ru是runtime的缩写，对应RuntimeService接口和TaskService接口，存储流程实例和用户任务等动态数据
  
 
-####四 activity 配置
+### 四 activity 配置
     spring.activiti.database-schema-update
     配置项可以设置流程引擎启动和关闭时数据库执行的策略，可以选择四种模式
     
