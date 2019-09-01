@@ -1,0 +1,49 @@
+<div id="inner_container" class="easyui-layout" style="width:100%;height:100%;">
+    <!-- 按钮 -->
+    <div id="toolbar">
+    </div>
+    <!-- 列表 -->
+    <div id="main" toolbar="#toolbar" data-options="region:'center'">
+        <table id="defination_list"></table>
+    </div>
+
+</div>
+<script th:inline="none">
+    $(document).ready(function () {
+        $("#defination_list").datagrid({
+            title: '流程定义',
+            url: '/deployManage/definationList',
+            method: "get",
+            idField: 'id',
+            fitColumns: false,
+            resize: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            height: $("#inner_container").height(),
+            singleSelect: false,
+            rownumbers: true,
+            toolbar: '#toolbar',
+            columns: [[
+                {
+                    field: 'id', title: 'ID', align: 'center',
+                    formatter: function (value, row, index) {
+                        return "<a href='"+systemNamePath+"/deployManage/viewImage?imageName="+row.diagramResourceName+"&deploymentId="+row.deploymentId+"' target='_blank'>" + row.id+ "</a>";
+                    }
+
+                },
+                {field: 'name', title: '流程名称'},
+                {field: 'key', title: '流程定义的KEY'},
+                {field: 'version', title: '流程定义的版本'},
+                {field: 'resourceName', title: '流程定义的规则文件名称'},
+                {field: 'diagramResourceName', title: '流程定义的规则图片名称'},
+                {field: 'deploymentId', title: '部署ID'}
+            ]],
+            onBeforeLoad: function (value, rec) {
+
+            }
+        });
+
+    });
+
+</script>

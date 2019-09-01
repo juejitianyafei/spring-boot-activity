@@ -1,0 +1,71 @@
+<form id="userAddForm" method="post" action="/user/save">
+    <table class="easyui-panel">
+        <tr>
+            <td>用户id：</td>
+            <td style="margin-bottom:20px"><input class="easyui-validatebox" type="text" name="id"
+                                                  data-options="required:true" value=""></input></td>
+        </tr>
+        <tr>
+            <td>姓：</td>
+            <td style="margin-bottom:20px"><input class="easyui-validatebox" type="text" name="firstName"
+                                                  data-options="required:true" value=""></input></td>
+        </tr>
+        <tr>
+            <td>名：</td>
+            <td style="margin-bottom:20px"><input class="easyui-validatebox" type="text" name="lastName"
+                                                  data-options="required:true" value=""></input></td>
+        </tr>
+        <tr>
+            <td>用户密码：</td>
+            <td style="margin-bottom:20px"><input class="easyui-validatebox" type="password" name="password"
+                                                  data-options="required:true" value=""></input></td>
+        </tr>
+        <tr>
+            <td>邮箱：</td>
+            <td style="margin-bottom:20px"><input class="easyui-validatebox" type="text" name="email"
+                                                  data-options="required:true" value=""></input></td>
+        </tr>
+    </table>
+</form>
+<div style="text-align:center;padding:5px">
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">保存</a>
+</div>
+
+
+<script th:inline="javascript">
+    <!--
+    function submitForm() {
+        var id = $("input[name=id]");
+        var password = $("input[name=password]");
+
+        $('#userAddForm').form('submit', {
+            onSubmit: function () {
+                if (id.val() == null || id.val() == '') {
+                    $.messager.alert('提示', '请填写用户ID！');
+                    id.focus();
+                    return false;
+                }
+
+                if (password.val() == null || password.val() == '') {
+                    $.messager.alert('提示', '请填写用户密码！');
+                    password.focus();
+                    return false;
+                }
+            },
+            success: function (data) {
+                if (data == "success") {
+                    $("#user_win_add").dialog("destroy");
+                    $('#user_list').datagrid('reload');
+                } else {
+                    $.messager.alert('提示', data);
+                    $("#user_win_add").dialog("destroy");
+                }
+
+            }
+        });
+
+
+    }
+
+    -->
+</script>

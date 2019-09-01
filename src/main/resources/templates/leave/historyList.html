@@ -1,0 +1,139 @@
+<div id="inner_container" class="easyui-layout" style="width:100%;height:100%;">
+    <!-- 按钮 -->
+    <div id="toolbar">
+<!--        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-ok" plain="true"-->
+<!--           onclick="apply()">申请请假</a>-->
+    </div>
+    <!-- 列表 -->
+    <div id="main" toolbar="#toolbar" data-options="region:'center'">
+        <table id="leave_his_list"></table>
+    </div>
+
+</div>
+<script th:inline="none">
+    $(document).ready(function () {
+        $("#leave_his_list").datagrid({
+            title: '用户列表',
+            url: '/leave/historyList',
+            method: "get",
+            idField: 'id',
+            fitColumns: false,
+            resize: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            height: $("#inner_container").height(),
+            singleSelect: false,
+            rownumbers: true,
+            toolbar: '#toolbar',
+            columns: [[
+                {field: 'id', title: 'ID'},
+                {field: 'leaveType', title: '假种'},
+                {field: 'userId', title: '申请人'},
+                {field: 'startTime', title: '开始时间'},
+                {field: 'endTime', title: '结束时间'},
+                {field: 'reason', title: '内容'},
+                {field: 'history', title: '当前节点', align: 'center',
+                    formatter: function (value, row, index) {
+                        var value = '';
+                        value += '<a href="#"   onclick="grapHis(' + row.id + ')">审批历史</a>  ';
+                        value += '<a href="#"  onclick="graphTrace(' + row.processInstanceId + ')">查看流程图</a>';
+                        return value;
+                    }
+                },
+                {field: 'applyTime', title: '申请时间'},
+            ]],
+            onBeforeLoad: function (value, rec) {
+                var processDefinitionSuspended = $(this).datagrid("getColumnOption", "processDefinitionSuspended");
+                if (processDefinitionSuspended) {
+                    processDefinitionSuspended.formatter = function (value, rowData, rowIndex) {
+                        if (value) {
+                            return "已挂起";
+                        } else  {
+                            return "正常";
+                        }
+                    }
+                }
+                var startTime = $(this).datagrid("getColumnOption", "startTime");
+                if (startTime) {
+                    startTime.formatter = function (value, rowData, rowIndex) {
+                        var unixTimestamp = new Date(value);
+                        return unixTimestamp.toLocaleString();
+                    }
+                }
+                var endTime = $(this).datagrid("getColumnOption", "endTime");
+                if (endTime) {
+                    endTime.formatter = function (value, rowData, rowIndex) {
+                        var unixTimestamp = new Date(value);
+                        return unixTimestamp.toLocaleString();
+                    }
+                }
+                var taskCreateTime = $(this).datagrid("getColumnOption", "taskCreateTime");
+                if (taskCreateTime) {
+                    taskCreateTime.formatter = function (value, rowData, rowIndex) {
+                        var unixTimestamp = new Date(value);
+                        return unixTimestamp.toLocaleString();
+                    }
+                }
+            }
+        });
+
+    });
+
+
+    //查看
+    function grapHis(leaveId) {
+
+        $("#leave_his_list").after("<div id='showAuditHis' style=' padding:10px; '></div>");
+        $("#showAuditHis").dialog({
+            resizable: false,
+            title: '审批历史',
+            href: systemNamePath + "/leave/toViewAuditHis?leaveId=" + leaveId ,
+            width: 1200,
+            height: 300,
+            modal: true,
+            top: 100,
+            left: 20,
+            buttons: [
+                {
+                    text: '关闭',
+                    iconCls: 'icon-cancel',
+                    handler: function () {
+                        $("#showAuditHis").dialog('close');
+                    }
+                }
+            ],
+            onClose: function () {
+                $(this).dialog('destroy');
+            }
+        });
+
+    }
+    //查看
+    function graphTrace(pid) {
+
+        $("#leave_his_list").after("<div id='showTrace' style=' padding:10px; '></div>");
+        $("#showTrace").dialog({
+            resizable: false,
+            title: '流程预览',
+            href: systemNamePath + "/activity/toViewFlowImg?pid=" + pid,
+            width: 1200,
+            height: 650,
+            modal: true,
+            top: 100,
+            left: 100,
+            buttons: [
+                {
+                    text: '关闭',
+                    iconCls: 'icon-cancel',
+                    handler: function () {
+                        $("#showTrace").dialog('close');
+                    }
+                }
+            ],
+            onClose: function () {
+                $(this).dialog('destroy');
+            }
+        });
+    }
+</script>

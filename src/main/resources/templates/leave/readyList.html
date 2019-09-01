@@ -1,0 +1,143 @@
+<div id="inner_container" class="easyui-layout" style="width:100%;height:100%;">
+    <!-- 按钮 -->
+    <div id="toolbar">
+<!--        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-ok" plain="true"-->
+<!--           onclick="apply()">申请请假</a>-->
+    </div>
+    <!-- 列表 -->
+    <div id="main" toolbar="#toolbar" data-options="region:'center'">
+        <table id="leave_ready_list"></table>
+    </div>
+
+</div>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $("#leave_ready_list").datagrid({
+            title: '用户列表',
+            url: '/leave/readyList',
+            method: "get",
+            idField: 'id',
+            fitColumns: false,
+            resize: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            height: $("#inner_container").height(),
+            singleSelect: false,
+            rownumbers: true,
+            toolbar: '#toolbar',
+            columns: [[
+                // {field:'id',checkbox:true},
+                {field: 'id', title: 'ID'},
+                {field: 'leaveType', title: '假种'},
+                {field: 'userId', title: '申请人'},
+                {field: 'applyTime', title: '申请时间'},
+                {field: 'startTime', title: '开始时间'},
+                {field: 'endTime', title: '结束时间'},
+                {field: 'status', title: '当前节点', align: 'center',
+                    formatter: function (value, row, index) {
+                        var value = '';
+                        value += '<a href="#"  title="点击查看流程图" onclick="graphTrace(' + row.processInstanceId + ')">' + row.taskName + '</a>';
+                        return value;
+                    }
+                },
+                {field: 'taskCreateTime', title: '任务创建时间'},
+                {field: 'processDefinitionSuspended', title: '流程状态'},
+                {field: 'action', title: '操作', align: 'center',
+                    formatter: function (value, row, index) {
+                        var value = '';
+                        if(row.assignee ==null){
+                            value += '<a  href="#"  onclick="claim('+ row.taskId +')" >签收</a>&nbsp ';
+                        }else{
+                            value += '<a  href="#"  onclick="doTask(' +row.id +','+ row.taskId+')" >办理</a>';
+                        }
+                        return value;
+                    }
+                }
+            ]],
+            onBeforeLoad: function (value, rec) {
+                var processDefinitionSuspended = $(this).datagrid("getColumnOption", "processDefinitionSuspended");
+                if (processDefinitionSuspended) {
+                    processDefinitionSuspended.formatter = function (value, rowData, rowIndex) {
+                        if (value) {
+                            return "已挂起";
+                        } else  {
+                            return "正常";
+                        }
+                    }
+                }
+                var taskCreateTime = $(this).datagrid("getColumnOption", "taskCreateTime");
+                if (taskCreateTime) {
+                    taskCreateTime.formatter = function (value, rowData, rowIndex) {
+                        var unixTimestamp = new Date(value);
+                        return unixTimestamp.toLocaleString();
+                    }
+                }
+            }
+        });
+
+    });
+
+    //签收
+    function claim(taskId) {
+            var url = systemNamePath+'/leave/claim?taskId='+taskId;
+            $.ajax({url:url,async:false});
+            $('#leave_ready_list').datagrid('reload');
+    };
+    //办理
+    function doTask(id,taskId) {
+
+            $("#leave_ready_list").after("<div id='showComplete' style=' padding:10px; '></div>");
+            $("#showComplete").dialog({
+                resizable: false,
+                title: '请假审批',
+                href: systemNamePath + "/leave/toViewComplete?id=" + id+"&taskId="+taskId,
+                width: 600,
+                height: 500,
+                modal: true,
+                top: 100,
+                left: 300,
+                buttons: [
+                    {
+                        text: '关闭',
+                        iconCls: 'icon-cancel',
+                        handler: function () {
+                            $("#showComplete").dialog('close');
+                        }
+                    }
+                ],
+                onClose: function () {
+                    $(this).dialog('destroy');
+                }
+            });
+    };
+
+    //查看
+    function graphTrace(pid, pdid) {
+
+        $("#leave_ready_list").after("<div id='showTrace' style=' padding:10px; '></div>");
+        $("#showTrace").dialog({
+            resizable: false,
+            title: '流程预览',
+            href: systemNamePath + "/activity/toViewFlowImg?pid=" + pid ,
+            width: 1000,
+            height: 650,
+            modal: true,
+            top: 100,
+            left: 100,
+            buttons: [
+                {
+                    text: '关闭',
+                    iconCls: 'icon-cancel',
+                    handler: function () {
+                        $("#showTrace").dialog('close');
+                    }
+                }
+            ],
+            onClose: function () {
+                $(this).dialog('destroy');
+            }
+        });
+
+    }
+</script>

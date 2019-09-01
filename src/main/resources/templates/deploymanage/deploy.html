@@ -1,0 +1,46 @@
+<div class="easyui-panel" title="流程部署" style="width:500px;padding:30px 70px 50px 70px">
+    <form   id="deployForm" method="post" enctype="multipart/form-data">
+        <div style="margin-bottom:20px">
+            <label >流程名称:</label>
+            <input class="easyui-textbox" id="flowName" name="flowName">
+        </div>
+        <div style="margin-bottom:20px">
+            <label >流程文件:</label>
+            <input class="easyui-filebox" data-options="prompt:'浏览'" id="flowFile" name="flowFile" style="width:155px"/>
+        </div>
+        <div>
+            <a href="#" class="easyui-linkbutton"  onclick="submitForm()" >提交</a>
+        </div>
+    </form>
+</div>
+<script th:inline="javascript">
+    function submitForm() {
+        var flowName = $("input[name=flowName]");
+        var flowFile = $("input[name=flowFile]");
+        debugger;
+        $('#deployForm').form('submit', {
+            url: systemNamePath + "/deployManage/deploy",
+            onSubmit: function () {
+
+
+                if (flowName.val() == null || flowName.val() == '') {
+                    $.messager.alert('提示', '文件名不能为空！');
+                    flowName.focus();
+                    return false;
+                }
+
+                if (flowFile.val() == null || flowFile.val() == '') {
+                    $.messager.alert('提示', '请选择文件！');
+                    flowFile.focus();
+                    return false;
+                }
+
+            },
+            success: function (data) {
+                alert(data)
+
+
+            }
+        });
+    }
+</script>

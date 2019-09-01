@@ -1,0 +1,94 @@
+<form id="leaveCompleteForm" method="post" action="/leave/save">
+    <legend>
+        <large th:text="|请假审批【${leave.taskName}】|"></large>
+    </legend>
+    <table cellpadding="5">
+        <tr>
+            <td>申请人：</td>
+            <td>
+                <input type="text" id="userId" name="userId" th:value="${leave.userId}" disabled/>
+                <input type="hidden" id="taskId" name="taskId" th:value="${leave.taskId}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>请假类型：</td>
+            <td>
+                <input type="text" id="leaveType" name="leaveType" th:value="${leave.leaveType}" disabled/>
+            </td>
+        </tr>
+        <tr>
+            <td>申请时间：</td>
+            <td><input type="text" id="applyTime" name="applyTime" th:value="${leave.applyTime}" disabled/></td>
+        </tr>
+        <tr>
+            <td>开始时间：</td>
+            <td><input type="text" id="startTime" name="startTime" th:value="${leave.startTime}" disabled/></td>
+        </tr>
+        <tr>
+            <td>结束时间：</td>
+            <td><input type="text" id="endTime" name="endTime" th:value="${leave.endTime}" disabled/></td>
+        </tr>
+        <tr>
+            <td>请假原因：</td>
+            <td>
+                <input type="text" name="reason" th:value="${leave.reason}" disabled/>
+            </td>
+        </tr>
+        <tr>
+            <th>审批意见：</th>
+            <td>
+                <input type="text" name="approvalSuggestion"/>
+            </td>
+
+        </tr>
+        <tr>
+            <th>审批结果：</th>
+            <td>
+                <input type="radio" name="approvalResult" value="true"/>同意
+                <input type="radio" name="approvalResult" value="false"/>拒绝
+            </td>
+        </tr>
+
+    </table>
+    <div style="text-align:left;padding:5px 0px 0px 0px ">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="doTask()">提交</a>
+    </div>
+</form>
+
+
+
+<script th:inline="javascript">
+
+    function doTask() {
+        var leaveId = [[${leave.id}]];
+        var taskId = [[${leave.taskId}]];
+        var processInstanceId = [[${leave.processInstanceId}]];
+        var currentTaskNode = [[${leave.taskName}]];
+        var approvalResult = $("input[name='approvalResult']:checked").val();
+        var approvalSuggestion = $("[name='approvalSuggestion']").val();
+        $.ajax({
+            type: 'POST',
+            url: systemNamePath + "/leave/complete",
+            async: false,
+            data: {
+                currentTaskNode:currentTaskNode,
+                approvalResult:approvalResult,
+                approvalSuggestion:approvalSuggestion,
+                leaveId:leaveId,
+                taskId:taskId,
+                processInstanceId:processInstanceId
+
+            },
+            success: function (data) {
+                $("#showComplete").dialog('destroy');
+                $('#leave_ready_list').datagrid('load');
+            },
+            error: function (e) {
+                $.messager.show("操作失败！");
+            }
+        });
+
+    }
+
+
+</script>

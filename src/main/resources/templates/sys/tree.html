@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<script th:src="@{/js/sys/sys.js}"></script>
+<body>
+<div th:fragment="sys-tree">
+    <ul class="easyui-tree" id="sys-tree" >
+        <li>
+            <span>系统管理</span>
+            <ul>
+                <li data-options="state:'open'">
+                    <span>请假管理</span>
+                    <ul class="sysmanager" id="leaveManage">
+                        <li id="applyLeave">请假<span></span></li>
+                        <li id="readyList">待办任务<span></span></li>
+                        <li id="historyList">历史任务<span></span></li>
+                    </ul>
+                </li>
+                <li data-options="state:'closed'">
+                    <span>流程管理</span>
+                    <ul class="sysmanager" id="flowManage">
+                        <li id="deployManage"><span>部署</span></li>
+                        <li id="flowDefination"><span>流程定义信息</span></li>
+                        <li id="deployList"><span>部署信息管理</span></li>
+                    </ul>
+                </li>
+                <li data-options="state:'closed'">
+                    <span>用户管理</span>
+                    <ul class="sysmanager" id="userManage">
+                        <li id="userList"><span>用户列表</span></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><span>个人信息</span></li>
+        <li><span>修改密码</span></li>
+        <li id="dologout"><span>安全退出</span></li>
+    </ul>
+</div>
+</body>
+</html>

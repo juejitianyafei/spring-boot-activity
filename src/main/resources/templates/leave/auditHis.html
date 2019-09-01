@@ -1,0 +1,43 @@
+<div id="inner_container" class="easyui-layout">
+    <form id="auditHisForm">
+        <legend>
+            <b>请假申请</b>
+        </legend>
+        <table cellpadding="5" class="easyui-datagrid" fitColumns="true" singleSelect="true">
+            <thead>
+            <tr>
+                <th field="节点名称" width="20%" align="center">节点名称</th>
+                <th field="办理人" width="15%" align="center">办理人</th>
+                <th field="审批结果" width="15%" align="center">审批结果</th>
+                <th field="意见" width="20%" align="center">意见</th>
+                <th field="处理时间" width="20%" align="center">处理时间</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row,rowStat : ${auditHisList}">
+                <td th:text="${row.currentTaskNode}"></td>
+                <td th:text="${row.assignee}"></td>
+                <td th:text="${row.approvalResult==true?'同意':'不同意'}"></td>
+                <td th:text="${row.approvalSuggestion}"></td>
+                <td th:text="${row.oprateTime}"></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $('#startTime').datetimebox({
+            required: true,
+            showSeconds: false
+        });
+        $('#endTime').datetimebox({
+            required: true,
+            showSeconds: false
+        });
+    });
+
+</script>

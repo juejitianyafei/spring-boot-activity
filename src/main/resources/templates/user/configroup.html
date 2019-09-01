@@ -1,0 +1,70 @@
+<div id="inner_container" class="easyui-layout" style="width:100%;height:100%;" >
+
+    <!-- 按钮 -->
+    <div id="toolbar_1">
+                <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-man" plain="true" onclick="config()">配置</a>
+    </div>
+    <!-- 列表 -->
+    <div id="main" toolbar="#toolbar_1" data-options="region:'center'">
+        <td><input  type="hidden" name="userId" th:value="${user.id}"/></td>
+        <table id="group_list"></table>
+    </div>
+
+</div>
+
+
+<script th:inline="none">
+    $(document).ready(function () {
+        $("#group_list").datagrid({
+            title: '用户组',
+            url: '/user/groupList',
+            method: "get",
+            idField: 'id',
+            fitColumns: false,
+            resize: false,
+            striped: true,
+            pagination: true,
+            pageSize: 10,
+            height: $("#inner_container").height(),
+            singleSelect: false,
+            rownumbers: true,
+            toolbar: '#toolbar_1',
+            columns: [[
+                {field: 'id', title: 'ID'},
+                {field: 'name', title: '用户名'},
+                {field: 'type', title: '类型'}
+            ]]
+        });
+
+    });
+    function config() {
+        var userId  = $("[name='userId']").val();
+        var rows= $('#group_list').datagrid('getSelections');
+        if(rows == null ){
+            $.messager.alert('提示','请选取一行数据');
+        }else{
+            var groupIds = new Array();
+            $.each(rows, function(index, item){
+                groupIds.push(item.id);
+            });
+            $.ajax({
+                type: 'POST',
+                url: systemNamePath + "/user/config",
+                async: false,
+                data: {
+                    userId:userId,
+                    groupIds:groupIds
+
+                },
+                success: function (data) {
+                    $("#user_win_config").dialog('destroy');
+                    $('#user_list').datagrid('reload');
+                },
+                error: function (e) {
+                    $.messager.show("操作失败！");
+                }
+            });
+        }
+
+    }
+</script>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>工作流</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/jquery-easyui/themes/default/easyui.css}"/>
+    <link rel="stylesheet" th:href="@{/jquery-easyui/themes/icon.css}"/>
+    <link rel="stylesheet" th:href="@{/jquery-easyui/themes/color.css}"/>
+
+    <script th:src="@{/jquery-easyui/jquery.min.js}"></script>
+    <script th:src="@{/jquery-easyui/jquery.easyui.min.js}"></script>
+
+</head>
+<body>
+<div id="index_div" style="margin-top:100px;margin-left:100px;">
+    <div class="easyui-panel" title="用户登录" style="width:350px;">
+        <div style="padding:10px 0 10px 60px">
+            <form id="indexForm" method="post" th:action="@{/login}" action="#">
+                <!--<form action="#" th:action="@{/greeting}" th:object="${greeting}" method="post">-->
+                <table>
+                    <tr>
+                        <td>登录用户名:</td>
+                        <td><input type="text" name="username"/></td>
+                    </tr>
+                    <tr>
+                        <td>登录密码:</td>
+                        <td>
+                            <input type="password" name="password"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div style="text-align:center;padding:5px">
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="indexForm_sub()">用户登录</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="indexForm_clear()">重置</a>
+        </div>
+    </div>
+</div>
+<script>
+
+    function indexForm_sub() {
+        if ($("input[name=username]").val() == null || $("input[name=username]").val() == '') {
+            $.messager.alert('提示', '请填写登录用户名称！');
+            $("input[name=username]").focus();
+            return false;
+        }
+        if ($("input[name=password]").val() == null || $("input[name=password]").val() == '') {
+            $.messager.alert('提示', '请填写登录用户密码！');
+            $("input[name=password]").focus();
+            return false;
+        }
+        $('#indexForm').submit();
+    };
+
+    function indexForm_clear() {
+        var formObj = document.getElementById("indexForm");
+        formObj.userName.value = '';
+        formObj.password.value = '';
+    };
+</script>
+</body>
+</html>

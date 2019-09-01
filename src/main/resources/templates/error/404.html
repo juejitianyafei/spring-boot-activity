@@ -1,0 +1,61 @@
+
+<style th:inline="none">
+body {margin:0;padding:0;font-size:14px;line-height:1.231;color:#555;text-align:center;font-family:"\5fae\8f6f\96c5\9ed1","\9ed1\4f53",tahoma,arial,sans-serif;}
+a {color:#555;text-decoration:none;}
+a:hover {color:#1abc9c;}
+#container {width:684px;height:315px;margin:100px auto 0px auto;border:#449BB6 solid 6px;background-color:#449BB6;}
+#container #title {overflow:hidden; padding-top:30px;}
+#container #title h1 {font-size:36px;text-align:center;color:#FFFFFF;}
+#content p{ font-size:18px;}
+#footer {width:100%;padding:20px 0px;font-size:16px;color:#555;text-align:center;}
+</style>
+
+<script th:inline="none">
+var i = 4;
+var intervalid;
+intervalid = setInterval("fun()", 1000);
+function fun() {
+	if (i == 0) {
+		if (opener == null) {
+			window.history.back(-1);
+		} else {
+			window.opener = null;
+			window.open('', '_self');
+			window.close();
+		}
+	} else {
+		document.getElementById("mes").innerHTML = i;
+		i--;
+	}
+}
+</script>
+</head>
+<body>
+<div id="container">
+<div id="title"><h1></h1></div>
+<div id="content">
+<p style="color:#ff0000">您所请求的页面未找到...</p>
+<br />
+<p style="font-size:45px;font-weight:bold;color:#FFFFFF">404</p>
+</div>
+</div>
+<div id="footer"></div>
+<p>将在 <span id="mes" style="color:#ff0000">5</span> 秒钟后<span id="showText"></span>！</p>
+
+<script th:inline="none">
+    if (opener == null) {
+        //document.getElementById("footer").innerHTML
+        //document.getElementById("showText").innerHTML
+        document.getElementById("footer").innerHTML = "<a href='javascript:history.go(-1)'>返回</a>";
+        document.getElementById("showText").innerHTML = "返回";
+    } else {
+        document.getElementById("footer").innerHTML = "<a href='#' onclick='closeWin();'>关闭</a>";
+        document.getElementById("showText").innerHTML = "关闭";
+    }
+
+    function closeWin() {
+        window.opener = null;
+        window.open('', '_self');
+        window.close();
+    }
+</script>
